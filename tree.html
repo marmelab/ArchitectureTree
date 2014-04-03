@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <link rel="stylesheet" href="css/foundation.min.css" />
+<style>
+
+.node circle {
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 1.5px;
+}
+
+.details {
+  position: absolute;
+  top: 200px;
+  right: 10px;
+  border: solid 1px #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background: #eee;
+}
+
+.details h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.2em;
+}
+
+.details ul {
+  padding: 0; margin: 0;
+}
+
+.details ul li {
+  padding-left: 10px;
+  list-style: none;
+}
+</style>
+</head>
+<body>
+<div class="details">
+  <h2 class="name"></h2>
+  <ul class="dependencies">
+    depends on:
+  </ul>
+  <ul class="dependents">
+    dependents:
+  </ul>
+</div>
+<script src="js/d3.v3.js"></script>
+<script>
+
+var diameter = 960;
+
+var tree = d3.layout.tree()
+    .size([360, diameter / 2 - 120])
+    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter - 150)
+  .append("g")
+    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+var fade = function(opacity) {
+  return function(node) {
+    //if (!node.dependsOn || !(node.parent && node.parent.dependsOn)) return;
+    svg.selectAll(".node")
+      .filter(function(d) {
+        if (d.name === node.name) return false;
+        return dependsOn(node, d.name);
+      })
+    .transition()
+      .style("opacity", opacity);
+  }
+};
+
+var dependsOn = function(node, name) {
+  if (node.dependsOn && node.dependsOn.indexOf(name) !== -1) return false;
+  if (node.parent) return dependsOn(node.parent, name);
+  return true;
+}
+
+var color = d3.scale.linear()
+    .domain([1, 0])
+    .range(["steelblue", "red"]);
+
+var details = d3.select('.details');
+
+var showDetails = function(d) {
+  details.select('.name').text(d.name);
+  details.select('li').remove();
+  var dependencies = details.select('.dependencies');
+  if (d.dependsOn) {
+    d.dependsOn.forEach(function(dependsOn) {
+      dependencies.append('li').text(dependsOn)
+    })
+  }
+  var dependents = details.select('.dependents');
+  if (d.dependents) {
+    d.dependents.forEach(function(dependent) {
+      dependents.append('li').text(dependent)
+    })
+  }
+  details.transition().style('opacity', 1);
+};
+
+var hideDetails = function(d) {
+  details.select('li').remove();
+  details.style('opacity', 0);
+}
+
+var addDependents = function(nodes) {
+  var dependents = [];
+  nodes.forEach(function(node) {
+    if (node.dependsOn) {
+      node.dependsOn.forEach(function(dependsOn) {
+        if (!dependents[dependsOn]) {
+          dependents[dependsOn] = [];
+        }
+        dependents[dependsOn].push(node.name);
+      })
+    }
+  });
+  nodes.forEach(function(node, index) {
+    if (dependents[node.name]) {
+      nodes[index].dependents = dependents[node.name];
+    }
+  });
+};
+
+d3.json("data.json", function(error, root) {
+
+  var nodes = tree.nodes(root),
+      links = tree.links(nodes);
+
+  addDependents(nodes);
+
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", diagonal);
+
+  var node = svg.selectAll(".node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+      .on('mouseover', function(d) { fade(0.1)(d); showDetails(d); })
+      .on('mouseout', function(d) { fade(1)(d); hideDetails(d); });
+
+  node.append("circle")
+      .attr("r", function(d) { return 4.5 * (d.size || 1); })
+      .style('stroke', function(d) { 
+        return color(typeof d.satisfaction !== "undefined" ? d.satisfaction : 1);
+      })
+      .style('fill', function(d) {
+        if (typeof d.satisfaction === "undefined") return '#fff';
+        return color(d.satisfaction).brighter(5);
+      });
+
+  node.append("text")
+      .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+      .text(function(d) { return d.name; });
+});
+
+</script>
+</body>
+
+
+
+
