@@ -37,16 +37,10 @@
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
   <div class="details panel panel-info">
-    <div class="panel-heading name"></div>
+    <div class="panel-heading"></div>
     <div class="panel-body">
-    <ul class="dependencies">
-    </ul>
-    <ul class="dependents">
-    </ul>
-    <ul class="technos">
-    </ul>
     </div>
   </div>
 </div>
@@ -68,62 +62,17 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-var fade = function(opacity) {
-  return function(node) {
-    //if (!node.dependsOn || !(node.parent && node.parent.dependsOn)) return;
-    svg.selectAll(".node")
-      .filter(function(d) {
-        if (d.name === node.name) return false;
-        return dependsOn(node, d.name);
-      })
-    .transition()
-      .style("opacity", opacity);
-  }
-};
-
-var dependsOn = function(node, name) {
-  if (node.dependsOn && node.dependsOn.indexOf(name) !== -1) return false;
-  if (node.parent) return dependsOn(node.parent, name);
-  return true;
-}
-
-var color = d3.scale.linear()
+var strokeColor = d3.scale.linear()
     .domain([1, 0])
     .range(["steelblue", "red"]);
 
+var fillColor = d3.scale.linear()
+    .domain([1, 0])
+    .range(["white", "#f66"]);
+
 var details = d3.select('.details');
-
-var showDetails = function(d) {
-  details.select('.name').text(d.name);
-  details.selectAll('ul').text();
-  var dependencies = details.select('.dependencies');
-  if (d.dependsOn) {
-    dependencies.text('dependencies')
-    d.dependsOn.forEach(function(dependsOn) {
-      dependencies.append('li').text(dependsOn)
-    })
-  }
-  var dependents = details.select('.dependents');
-  if (d.dependents) {
-    dependents.text('dependents')
-    d.dependents.forEach(function(dependent) {
-      dependents.append('li').text(dependent)
-    })
-  }
-  var technos = details.select('.technos');
-  if (d.technos) {
-    technos.text('technologies')
-    d.technos.forEach(function(techno) {
-      technos.append('li').text(techno)
-    })
-  }
-  details.transition().style('opacity', 1);
-};
-
-var hideDetails = function(d) {
-  details.selectAll('ul').text();
-  details.style('opacity', 0);
-}
+var detailsName = details.select('.panel-heading');
+var detailsProperties = details.select('.panel-body');
 
 var addDependents = function(nodes) {
   var dependents = [];
@@ -144,6 +93,116 @@ var addDependents = function(nodes) {
   });
 };
 
+var getDetailCascade = function(d, detailName, via) {
+  var values = [];
+  if (d[detailName]) {
+    d[detailName].forEach(function(value) {
+      values.push({ value: value, via: via });
+    });
+  }
+  if (d.parent) {
+    values = values.concat(getDetailCascade(d.parent, detailName, d.parent.name));
+  }
+  return values;
+};
+
+/**
+ * Details look like this:
+ * {
+ *   Dependencies: [
+ *     { value: "Foo" },
+ *     { value: "Bar", via: "Babar" }
+ *   ],
+ *   Dependents: [
+ *     { value: "Baz" },
+ *     { value: "Buzz" }
+ *   ],
+ *   Technos: [
+ *     { value: "Foo" },
+ *     { value: "Bar", via: "Babar" }
+ *   ],
+ *   Host: [
+ *     { value: "fo" },
+ *     { value: "bo" }
+ *   ],
+ *   relatedNodes: ["Foo", "Bar", "Baz", "Buzz"]
+ * }
+ */
+var getDetails = function(d) {
+  var details = { 
+    relatedNodes: []
+  };
+  var dependsOn = getDetailCascade(d, 'dependsOn');
+  if (dependsOn.length > 0) {
+    details.Dependencies = dependsOn;
+    details.relatedNodes = details.relatedNodes.concat(dependsOn.map(function(d) { return d.value; }));
+  }
+  if (d.dependents) {
+    details.Dependents = [];
+    d.dependents.forEach(function(dependent) {
+      details.Dependents.push({ value: dependent });
+    });
+    details.relatedNodes = details.relatedNodes.concat(d.dependents);
+  }
+  var technos = getDetailCascade(d, 'technos');
+  if (technos.length > 0) {
+    details.Technos = technos;
+  }
+  if (d.host) {
+    details.Host = [];
+    for (var i in d.host) {
+      details.Host.push({ value: i });
+    }
+  }
+  
+  return details;
+};
+
+var showDetails = function(d) {
+  detailsName.text(d.name);
+
+  var url = detailsProperties.selectAll('.url')
+      .data(d.url ? [d.url] : []);
+  url.enter().append('div')
+      .attr('class', 'url');
+  url.html(function(d) { 
+    return '<a href="http://' + d + '">' + d + '</a>'; 
+  });
+  url.exit().remove();
+
+  var comments = detailsProperties.selectAll('.comments')
+      .data(d.comments ? [d.comments] : []);
+  comments.enter().append('div')
+      .attr('class', 'comments panel panel-default');
+  comments.html(function(d) { 
+    return '<div class="panel-body">' + d + '</div>'; 
+  });
+  comments.exit().remove();
+
+  detailsProperties.selectAll('ul').remove();
+  for (var category in d.detailList) {
+    var ul = detailsProperties.append('ul');
+    ul.html('<h5>' + category + '<h5>');
+    d.detailList[category].forEach(function(detail) {
+      ul.append('li').text(detail.value + (detail.via ? ' (' + detail.via + ')' : ''));
+    });
+  }
+  details.transition().style('opacity', 1);
+};
+
+var fade = function(opacity) {
+  return function(node) {
+    //if (!node.dependsOn || !(node.parent && node.parent.dependsOn)) return;
+    svg.selectAll(".node")
+      .filter(function(d) {
+        if (d.name === node.name) return false;
+        return node.relatedNodes.indexOf(d.name) === -1;
+      })
+    .transition()
+      .style("opacity", opacity);
+  }
+};
+
 var computeTechnos = function(nodes) {
   var technos = {};
   nodes.forEach(function(node) {
@@ -156,12 +215,22 @@ var computeTechnos = function(nodes) {
   return technos;
 }
 
+var filters = {};
+
 d3.json("data.json", function(error, root) {
 
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
   addDependents(nodes);
+  nodes.forEach(function(node) {
+    var details = getDetails(node);
+    if (details.relatedNodes) {
+      node.relatedNodes = details.relatedNodes;
+      delete details.relatedNodes;
+    }
+    node.detailList = details;  
+  });
   console.log(computeTechnos(nodes));
 
   var link = svg.selectAll(".link")
@@ -175,17 +244,20 @@ d3.json("data.json", function(error, root) {
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-      .on('mouseover', function(d) { fade(0.1)(d); showDetails(d); })
-      .on('mouseout', function(d) { fade(1)(d); hideDetails(d); });
+      .on('mouseover', function(d) { 
+        fade(0.1)(d);
+        showDetails(d);
+      })
+      .on('mouseout', fade(1));
 
   node.append("circle")
       .attr("r", function(d) { return 4.5 * (d.size || 1); })
       .style('stroke', function(d) { 
-        return color(typeof d.satisfaction !== "undefined" ? d.satisfaction : 1);
+        return strokeColor(typeof d.satisfaction !== "undefined" ? d.satisfaction : 1);
       })
       .style('fill', function(d) {
         if (typeof d.satisfaction === "undefined") return '#fff';
-        return color(d.satisfaction).brighter(5);
+        return fillColor(typeof d.satisfaction !== "undefined" ? d.satisfaction : 1);
       });
 
   node.append("text")
