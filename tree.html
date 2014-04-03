@@ -10,7 +10,7 @@
 }
 
 .node {
-  font: 10px sans-serif;
+  font: 11px sans-serif;
 }
 
 .link {
@@ -37,7 +37,8 @@
 </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
+  <h1>Arte Architecture Visualization</h1>
   <div class="details panel panel-info">
     <div class="panel-heading"></div>
     <div class="panel-body">
@@ -56,11 +57,11 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".container").append("svg")
     .attr("width", diameter)
-    .attr("height", diameter - 150)
+    .attr("height", diameter)
   .append("g")
-    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+    .attr("transform", "translate(360,430)");
 
 var strokeColor = d3.scale.linear()
     .domain([1, 0])
