@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="css/foundation.min.css" />
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
 <style>
 
 .node circle {
@@ -19,39 +20,35 @@
 }
 
 .details {
-  position: absolute;
-  top: 200px;
+  position: fixed;
+  top: 10px;
   right: 10px;
-  border: solid 1px #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  background: #eee;
-}
-
-.details h2 {
-  margin: 0 0 5px 0;
-  font-size: 1.2em;
+  width: 250px;
 }
 
 .details ul {
-  padding: 0; margin: 0;
+  padding: 0;
 }
 
 .details ul li {
-  padding-left: 10px;
-  list-style: none;
+  margin-left: 20px;
 }
+
 </style>
 </head>
 <body>
-<div class="details">
-  <h2 class="name"></h2>
-  <ul class="dependencies">
-    depends on:
-  </ul>
-  <ul class="dependents">
-    dependents:
-  </ul>
+<div class="container">
+  <div class="details panel panel-info">
+    <div class="panel-heading name"></div>
+    <div class="panel-body">
+    <ul class="dependencies">
+    </ul>
+    <ul class="dependents">
+    </ul>
+    <ul class="technos">
+    </ul>
+    </div>
+  </div>
 </div>
 <script src="js/d3.v3.js"></script>
 <script>
@@ -98,24 +95,33 @@ var details = d3.select('.details');
 
 var showDetails = function(d) {
   details.select('.name').text(d.name);
-  details.select('li').remove();
+  details.selectAll('ul').text();
   var dependencies = details.select('.dependencies');
   if (d.dependsOn) {
+    dependencies.text('dependencies')
     d.dependsOn.forEach(function(dependsOn) {
       dependencies.append('li').text(dependsOn)
     })
   }
   var dependents = details.select('.dependents');
   if (d.dependents) {
+    dependents.text('dependents')
     d.dependents.forEach(function(dependent) {
       dependents.append('li').text(dependent)
+    })
+  }
+  var technos = details.select('.technos');
+  if (d.technos) {
+    technos.text('technologies')
+    d.technos.forEach(function(techno) {
+      technos.append('li').text(techno)
     })
   }
   details.transition().style('opacity', 1);
 };
 
 var hideDetails = function(d) {
-  details.select('li').remove();
+  details.selectAll('ul').text();
   details.style('opacity', 0);
 }
 
@@ -138,12 +144,25 @@ var addDependents = function(nodes) {
   });
 };
 
+var computeTechnos = function(nodes) {
+  var technos = {};
+  nodes.forEach(function(node) {
+    if (node.technos) {
+      node.technos.forEach(function(techno) {
+        technos[techno] = true;
+      });
+    }
+  });
+  return technos;
+}
+
 d3.json("data.json", function(error, root) {
 
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
   addDependents(nodes);
+  console.log(computeTechnos(nodes));
 
   var link = svg.selectAll(".link")
       .data(links)
@@ -178,7 +197,7 @@ d3.json("data.json", function(error, root) {
 
 </script>
 </body>
-
+</html>
 
 
 
