@@ -1,35 +1,56 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Architecture visualizations</title>
-    <link rel="stylesheet" href="css/foundation.min.css" />
-    <script src="js/vendor/modernizr.min.js"></script>
-  </head>
-  <body>
-    
-    <div class="row">
-      <div class="small-12 columns">
-        <h1>Architecture visualizations</h1>
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="small-12 columns">
-          <ul>
-            <li><a href="treemap.html">Treemap</a></li>
-            <li><a href="tree.html">Tree</a></li>
-            <li><a href="circle.html">Circle packing</a></li>
-            <li><a href="sunburst.html">Sunburst</a></li>
-          </ul>
-      </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/vendor/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/tree.css" />
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div ng-app="ChartsApp">
 
-    <script src="js/vendor/jquery.min.js"></script>
-    <script src="js/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-    </script>
-  </body>
+                <h1 class="text-center">Architecture Visualization</h1>
+
+                <div ng-controller="filterCtrl">
+                    <ng-include src="'js/angular.architectureViz-tree/templates/filter.html'"></ng-include>
+                </div>
+
+                <div ng-controller="chartCtrl">
+                    <tree-chart data="data" diameter="960"></tree-chart>
+                </div>
+
+                <div ng-controller="panelCtrl">
+                    <div id="panel">
+                        <div ng-if="detail">
+                            <ng-include src="'js/angular.architectureViz-tree/templates/panel-detail.html'"></ng-include>
+                        </div>
+
+                        <div ng-if="edit">
+                            <ng-include src="'js/angular.architectureViz-tree/templates/panel-edit.html'"></ng-include>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-controller="undoCtrl">
+                    <div ng-if="hasHistory()" class="json-upate-label bg-success">Updated JSON <a ng-click="undo()">(undo)</a></div>
+                </div>
+                <div ng-controller="jsonDataCtrl">
+                    <textarea id="json-data" class="form-control" ng-model="data" ng-blur="updateData()"></textarea>
+                </div>
+            </div>
+        </div>
+        <script src="js/vendor/d3.v3.js"></script>
+        <script src="js/vendor/angular.min.js"></script>
+        <script src="js/d3.architectureViz-tree.js"></script>
+        <script src="js/angular.architectureViz-tree/app.js"></script>
+        <script src="js/angular.architectureViz-tree/controllers/chart.js"></script>
+        <script src="js/angular.architectureViz-tree/controllers/filter.js"></script>
+        <script src="js/angular.architectureViz-tree/controllers/json-data.js"></script>
+        <script src="js/angular.architectureViz-tree/controllers/panel.js"></script>
+        <script src="js/angular.architectureViz-tree/controllers/undo.js"></script>
+        <script src="js/angular.architectureViz-tree/directives/tree-chart.js"></script>
+        <script src="js/angular.architectureViz-tree/directives/init-focus.js"></script>
+        <script src="js/angular.architectureViz-tree/services/data.js"></script>
+        <script src="js/angular.architectureViz-tree/services/bus.js"></script>
+    </body>
 </html>

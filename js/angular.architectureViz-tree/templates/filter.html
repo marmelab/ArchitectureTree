@@ -1,0 +1,16 @@
+<div class="filters panel panel-default">
+  <div class="panel-heading">Search</div>
+  <div class="panel-body">
+    <form id="filter_form">
+      <input name="name" type="text" class="form-control" placeholder="Filter by name" ng-model="$parent.nameFilter"/>
+      <div id="technos">
+        <h5>Technos</h5>
+        <a ng-repeat="techno in technos" class="btn btn-default btn-xs" ng-click="toggleTechnoFilter(techno)" ng-class="{'btn-primary': isTechnoInFilter(techno) }">{{ techno }}</a>
+      </div>
+      <div id="host">
+        <h5>Host</h5>
+        <a ng-repeat="host in hosts" class="btn btn-default btn-xs" ng-click="toggleHostFilter(host)" ng-class="{'btn-primary': isHostInFilter(host) }">{{ host }}</a>
+      </div>
+    </form>
+  </div>
+</div>

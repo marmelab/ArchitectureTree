@@ -1,0 +1,53 @@
+<div class="details panel panel-info">
+    <div class="panel-heading">{{ node.name }}</div>
+    <div class="panel-body">
+        <div class="url" ng-if="node.url">
+            <a href="{{ node.url }}">{{ node.url }}</a>
+        </div>
+
+        <div class="comments panel panel-default" ng-if="node.comments">
+            <div class="panel-body">{{ node.comments }}</div>
+        </div>
+
+        <div class="properties" ng-if="node.details.Dependencies">
+            <h5>Depends on</h5>
+            <ul>
+                <li ng-repeat="dependency in node.details.Dependencies">
+                    {{ dependency }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="properties" ng-if="node.details.Dependents">
+            <h5>Dependendents</h5>
+            <ul>
+                <li ng-repeat="dependent in node.details.Dependents">
+                    {{ dependent }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="properties" ng-if="node.details.Technos">
+            <h5>Technos</h5>
+            <ul>
+                <li ng-repeat="techno in node.details.Technos">
+                    {{ techno }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="properties" ng-if="node.details.Host">
+            <h5>Hosts</h5>
+            <ul>
+                <li ng-repeat="(hostName, servers) in node.host">
+                    {{ hostName }}
+                    <ul ng-if="servers">
+                        <li ng-repeat="server in servers">{{ server }}</li>
+                    </ul>
+                    <span ng-if="detail.via">({{ detail.via }})</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>

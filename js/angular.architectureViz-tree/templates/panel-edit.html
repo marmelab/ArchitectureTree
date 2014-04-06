@@ -1,0 +1,58 @@
+<form name="editForm" ng-submit="editNode(editForm, $event)">
+    <div class="details panel panel-info">
+        <div class="panel-heading">
+            <input type="text" ng-model="node.name" class="form-control"/>
+        </div>
+        <div class="panel-body">
+            <div class="url">
+                <h5>Url</h5>
+                <input type="text" ng-model="node.url" class="form-control" init-focus />
+            </div>
+
+            <div class="comments">
+                <h5>Comments</h5>
+                <textarea ng-model="node.comments" class="form-control" init-focus></textarea>
+            </div>
+
+            <div class="properties edit">
+                <h5>Depends on <span class="glyphicon glyphicon-plus" ng-click="addDependency()"></span></h5>
+                <ul>
+                    <li ng-repeat="dependencies in node.dependsOn track by $index">
+                        <input type="text" ng-model="node.dependsOn[$index]" init-focus /> <span class="remove glyphicon glyphicon-remove" ng-click="deleteDependency($index)"></span>
+                    </li>
+                </ul>
+
+                <h5>Technos <span class="glyphicon glyphicon-plus" ng-click="addTechno()"></span></h5>
+                <ul>
+                    <li ng-repeat="techno in node.technos track by $index">
+                        <input type="text" ng-model="node.technos[$index]" init-focus />  <span class="remove glyphicon glyphicon-remove" ng-click="deleteTechno($index)"></span>
+                    </li>
+                </ul>
+
+                <h5>Hosts <span class="glyphicon glyphicon-plus" ng-click="addHostCategory()"></span></h5>
+                <ul>
+                    <li ng-repeat="(key, host) in node.host track by $index">
+                        <input type="text" ng-model="hostKeys[key]" init-focus /><span class="glyphicon glyphicon-plus" ng-click="addHost(key)"></span>
+                        <span class="remove glyphicon glyphicon-remove" ng-click="deleteHostCategory(key)"></span>
+
+                        <ul>
+                            <li ng-repeat="test in node.host[key] track by $index">
+                                <span class="remove glyphicon glyphicon-remove" ng-click="deleteHost(key, $index)"></span>
+                                <input type="text" ng-model="node.host[key][$index]" init-focus />
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-action">
+            <button type="button" ng-click="addNode()" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add</button>
+            <button type="button" ng-click="moveNode()" class="btn btn-default"><span class="glyphicon glyphicon-share-alt"></span> Move</button>
+            <button type="button" ng-click="deleteNode()" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+        <div class="panel-action">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Save</button>
+            <button type="button" ng-click="leaveEdit()" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        </div>
+    </div>
+</form>
