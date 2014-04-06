@@ -13,10 +13,30 @@
   font: 11px sans-serif;
 }
 
+.node.notFound {
+  fill: #ccc;
+}
+
+.node.notFound circle {
+  stroke: #ccc!important;
+}
+
 .link {
   fill: none;
   stroke: #ddd;
   stroke-width: 1.5px;
+}
+
+.filters {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 200px;  
+}
+
+.filters .btn {
+  margin: 1px;
+  line-height: 1.3;
 }
 
 .details {
@@ -38,7 +58,21 @@
 </head>
 <body>
 <div class="container">
-  <h1>Arte Architecture Visualization</h1>
+  <h1 class="text-center">Architecture Visualization</h1>
+  <div class="filters panel panel-default">
+    <div class="panel-heading">Search</div>
+    <div class="panel-body">
+      <form id="filter_form">
+        <input name="name" type="text" class="form-control" placeholder="Filter by name"/>
+        <div id="technos">
+          <h5>Technos</h5>
+        </div>
+        <div id="host">
+          <h5>Host</h5>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="details panel panel-info">
     <div class="panel-heading"></div>
     <div class="panel-body">
@@ -46,6 +80,7 @@
   </div>
 </div>
 <script src="js/d3.v3.js"></script>
+<script src="js/enrichment.js"></script>
 <script>
 
 var diameter = 960;
@@ -61,7 +96,7 @@ var svg = d3.select(".container").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
   .append("g")
-    .attr("transform", "translate(360,430)");
+    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
 var strokeColor = d3.scale.linear()
     .domain([1, 0])
@@ -74,90 +109,6 @@ var fillColor = d3.scale.linear()
 var details = d3.select('.details');
 var detailsName = details.select('.panel-heading');
 var detailsProperties = details.select('.panel-body');
-
-var addDependents = function(nodes) {
-  var dependents = [];
-  nodes.forEach(function(node) {
-    if (node.dependsOn) {
-      node.dependsOn.forEach(function(dependsOn) {
-        if (!dependents[dependsOn]) {
-          dependents[dependsOn] = [];
-        }
-        dependents[dependsOn].push(node.name);
-      })
-    }
-  });
-  nodes.forEach(function(node, index) {
-    if (dependents[node.name]) {
-      nodes[index].dependents = dependents[node.name];
-    }
-  });
-};
-
-var getDetailCascade = function(d, detailName, via) {
-  var values = [];
-  if (d[detailName]) {
-    d[detailName].forEach(function(value) {
-      values.push({ value: value, via: via });
-    });
-  }
-  if (d.parent) {
-    values = values.concat(getDetailCascade(d.parent, detailName, d.parent.name));
-  }
-  return values;
-};
-
-/**
- * Details look like this:
- * {
- *   Dependencies: [
- *     { value: "Foo" },
- *     { value: "Bar", via: "Babar" }
- *   ],
- *   Dependents: [
- *     { value: "Baz" },
- *     { value: "Buzz" }
- *   ],
- *   Technos: [
- *     { value: "Foo" },
- *     { value: "Bar", via: "Babar" }
- *   ],
- *   Host: [
- *     { value: "fo" },
- *     { value: "bo" }
- *   ],
- *   relatedNodes: ["Foo", "Bar", "Baz", "Buzz"]
- * }
- */
-var getDetails = function(d) {
-  var details = { 
-    relatedNodes: []
-  };
-  var dependsOn = getDetailCascade(d, 'dependsOn');
-  if (dependsOn.length > 0) {
-    details.Dependencies = dependsOn;
-    details.relatedNodes = details.relatedNodes.concat(dependsOn.map(function(d) { return d.value; }));
-  }
-  if (d.dependents) {
-    details.Dependents = [];
-    d.dependents.forEach(function(dependent) {
-      details.Dependents.push({ value: dependent });
-    });
-    details.relatedNodes = details.relatedNodes.concat(d.dependents);
-  }
-  var technos = getDetailCascade(d, 'technos');
-  if (technos.length > 0) {
-    details.Technos = technos;
-  }
-  if (d.host) {
-    details.Host = [];
-    for (var i in d.host) {
-      details.Host.push({ value: i });
-    }
-  }
-  
-  return details;
-};
 
 var showDetails = function(d) {
   detailsName.text(d.name);
@@ -181,11 +132,11 @@ var showDetails = function(d) {
   comments.exit().remove();
 
   detailsProperties.selectAll('ul').remove();
-  for (var category in d.detailList) {
+  for (var category in d.details) {
     var ul = detailsProperties.append('ul');
     ul.html('<h5>' + category + '<h5>');
-    d.detailList[category].forEach(function(detail) {
-      ul.append('li').text(detail.value + (detail.via ? ' (' + detail.via + ')' : ''));
+    d.details[category].forEach(function(detail) {
+      ul.append('li').text(detail);
     });
   }
   details.transition().style('opacity', 1);
@@ -197,43 +148,81 @@ var fade = function(opacity) {
     svg.selectAll(".node")
       .filter(function(d) {
         if (d.name === node.name) return false;
-        return node.relatedNodes.indexOf(d.name) === -1;
+        return node.index.relatedNodes.indexOf(d.name) === -1;
       })
     .transition()
       .style("opacity", opacity);
   }
 };
 
-var computeTechnos = function(nodes) {
-  var technos = {};
-  nodes.forEach(function(node) {
-    if (node.technos) {
-      node.technos.forEach(function(techno) {
-        technos[techno] = true;
-      });
-    }
-  });
-  return technos;
-}
+var filters = {
+  name: '',
+  technos: [],
+  host: []
+};
 
-var filters = {};
+var isFoundByFilter = function(d) {
+  var i;
+  if (!filters.name && !filters.technos.length && !filters.host.length) {
+    // nothing selected
+    return true;
+  }
+  if (filters.name) {
+    if (d.name.toLowerCase().indexOf(filters.name) === -1) return false;
+  }
+  var technosCount = filters.technos.length;
+  if (technosCount) {
+    if (!d.index.technos.length) return false;
+    for (i = 0; i < technosCount; i++) {
+      if (d.index.technos.indexOf(filters.technos[i]) === -1) return false;
+    };
+  }
+  var hostCount = filters.host.length;
+  if (hostCount) {
+    if (!d.index.host.length) return false;
+    for (i = 0; i < hostCount; i++) {
+      if (d.index.host.indexOf(filters.host[i]) === -1) return false;
+    };
+  }
+  return true;
+};
+
+var searchNodes = function() {
+  // refresh filters object based on filter form
+  var searchForm = document.getElementById('filter_form');
+  filters.name = searchForm.querySelector('input[name="name"]').value.toLowerCase();
+  // filter nodes
+  d3.selectAll('.node').classed('notFound', function(d) {
+    return !isFoundByFilter(d);
+  });
+};
+
+var toggleTechnoFilter = function(techno) {
+  var index = filters.technos.indexOf(techno);
+  if (index === -1) {
+    filters.technos.push(techno);
+  } else {
+    filters.technos.splice(index, 1);
+  }
+};
+
+var toggleHostFilter = function(host) {
+  var index = filters.host.indexOf(host);
+  if (index === -1) {
+    filters.host.push(host);
+  } else {
+    filters.host.splice(index, 1);
+  }
+};
 
 d3.json("data.json", function(error, root) {
 
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
-  addDependents(nodes);
-  nodes.forEach(function(node) {
-    var details = getDetails(node);
-    if (details.relatedNodes) {
-      node.relatedNodes = details.relatedNodes;
-      delete details.relatedNodes;
-    }
-    node.detailList = details;  
-  });
-  console.log(computeTechnos(nodes));
+  enrich(nodes);
 
+  // draw tree chart
   var link = svg.selectAll(".link")
       .data(links)
     .enter().append("path")
@@ -266,6 +255,41 @@ d3.json("data.json", function(error, root) {
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
       .text(function(d) { return d.name; });
+
+  // initialize search form 
+  document.querySelector('#filter_form input').addEventListener('change', searchNodes);
+  document.querySelector('#filter_form input').addEventListener('keyup', searchNodes);
+  var technosSelect = d3.select('#technos');
+  computeTechnos(nodes).forEach(function(techno) {
+    var a = technosSelect.append('a')
+        .attr('class', 'btn btn-default btn-xs')
+        .text(techno)
+        .on('click', function() {
+          toggleTechnoFilter(techno);
+          searchNodes();
+          toggleButtonClass(a);
+      });
+  });
+  var hostSelect = d3.select('#host');
+  computeHost(nodes).forEach(function(host) {
+    var a = hostSelect.append('a')
+        .attr('class', 'btn btn-default btn-xs')
+        .text(host)
+        .on('click', function() {
+          toggleHostFilter(host);
+          searchNodes();
+          toggleButtonClass(a);
+      });
+  });
+  var toggleButtonClass = function(sel) {
+    if (sel.classed('btn-default')) {
+      sel.classed('btn-default', false);
+      sel.classed('btn-primary', true);
+    } else {
+      sel.classed('btn-primary', false);
+      sel.classed('btn-default', true);            
+    }
+  };
 });
 
 </script>
