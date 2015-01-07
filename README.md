@@ -2,7 +2,12 @@
 
 ArchitectureViz is a single page application to expose your system architecture into a nice vizialisation graph.
 
-It's simple to edit, using the user interface or by manualy updating the json description file.
+We generally use a client software to draw our system architecture schema, like Microsoft Visio &copy; for example. But often, only one member of the team has this software installed on his machine and the schema use a specific file format and there is no standard way to draw the schema. It become very hard to maintain during the software evolutions.
+
+ArchitectureViz give you the possibility to maintain a JSON description file, using standard structure and informations.
+It's simple to edit, using the user interface or by direct updating the json description file.
+
+Made with D3.js and AngularJS.
 
 ## Installation
 
@@ -17,7 +22,7 @@ cd ArchitectureViz
 
 First, you have to create a json description of your system into `data.json` file.
 
-For the beginning just copy the provided `data.json-dist` example file to `data.json`:
+To start, just copy the provided `data.json-dist` example file to `data.json`:
 
 ```bash
 cp data.json-dist data.json
@@ -37,41 +42,31 @@ Or the `Python` one:
 python -m SimpleHTTPServer 4000
 ```
 
-Or the `nodejs` one:
-
-```bash
-npm install http-server -g
-
-http-server -p 4000
-```
-
 Then, navigate to http://localhost:4000/.
 
 ## Usage
 
 Details reveal when hovering a node.
 
-You can edit the node by clicking on it, details on the right will be replaced by a form. For each modification, the `data.json` file will be automatically update.
+You can edit the node by clicking on it, details on the right will be replaced by a form. For each modification, the JSON in the bottom textarea will be automaticaly updated. You will be responsable to manualy report the json modifications into the `data.json` file and commit it.
 
 Filters on `name`, `technos` and `hosts` are avalaible on the left of the screen.
-
-Manual edition of `data.json` is also available on the interface, at the bottom of the page.
 
 ## Data description file
 
 The `data.json` file allowing to describe your architecture in a json format.
-It allow versionning by using git or another scm and edition by anyone of the project team members.
+It allows versionning by using git or another scm and edition by anyone of the project team members.
 
 After any update of the description file, check that it works locally before committing (any JSON validation error will result in a blank screen). 
 All charts rely on this data file.
 
-Note that you can also edit the file thanks to the powerfull interface.
+Note that you can also edit the file thanks to the powerful interface.
 
 ### Format
 
-Each element of your system is define by a node entry of the json.
+Each element of your system is defined by a JSON node entry.
 
-This is a complete node definition example:
+Here is a complete node definition example:
 
 ```json
 {
@@ -91,7 +86,7 @@ This is a complete node definition example:
 ### Properties
 
 * `name`: name of your application
-* `children`: list of application childrens
+* `children`: list of application childrens, the mapping is done on the node `name` (you should be aware that two nodes cannot have the same name)
 * `url`: url where the application is available (if any)
 * `dependsOn`: list of application dependencies
 * `technos`: list of technologies using by the application
