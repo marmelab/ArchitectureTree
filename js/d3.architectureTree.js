@@ -2,7 +2,7 @@
 
 d3.chart = d3.chart || {};
 
-d3.chart.architectureVizTree = function() {
+d3.chart.architectureTree = function() {
 
     var svg, tree, treeData, diameter, activeNode;
 

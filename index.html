@@ -9,10 +9,10 @@
         <div class="container-fluid">
             <div ng-app="ChartsApp">
 
-                <h1 class="text-center">Architecture Visualization</h1>
+                <h1 class="text-center">Architecture Tree</h1>
 
                 <div ng-controller="filterCtrl">
-                    <ng-include src="'js/angular.architectureViz-tree/templates/filter.html'"></ng-include>
+                    <ng-include src="'js/angular.architectureTree/templates/filter.html'"></ng-include>
                 </div>
 
                 <div ng-controller="chartCtrl">
@@ -22,11 +22,11 @@
                 <div ng-controller="panelCtrl">
                     <div id="panel">
                         <div ng-if="detail">
-                            <ng-include src="'js/angular.architectureViz-tree/templates/panel-detail.html'"></ng-include>
+                            <ng-include src="'js/angular.architectureTree/templates/panel-detail.html'"></ng-include>
                         </div>
 
                         <div ng-if="edit">
-                            <ng-include src="'js/angular.architectureViz-tree/templates/panel-edit.html'"></ng-include>
+                            <ng-include src="'js/angular.architectureTree/templates/panel-edit.html'"></ng-include>
                         </div>
                     </div>
                 </div>
@@ -41,16 +41,16 @@
         </div>
         <script src="js/vendor/d3.v3.js"></script>
         <script src="js/vendor/angular.min.js"></script>
-        <script src="js/d3.architectureViz-tree.js"></script>
-        <script src="js/angular.architectureViz-tree/app.js"></script>
-        <script src="js/angular.architectureViz-tree/controllers/chart.js"></script>
-        <script src="js/angular.architectureViz-tree/controllers/filter.js"></script>
-        <script src="js/angular.architectureViz-tree/controllers/json-data.js"></script>
-        <script src="js/angular.architectureViz-tree/controllers/panel.js"></script>
-        <script src="js/angular.architectureViz-tree/controllers/undo.js"></script>
-        <script src="js/angular.architectureViz-tree/directives/tree-chart.js"></script>
-        <script src="js/angular.architectureViz-tree/directives/init-focus.js"></script>
-        <script src="js/angular.architectureViz-tree/services/data.js"></script>
-        <script src="js/angular.architectureViz-tree/services/bus.js"></script>
+        <script src="js/d3.architectureTree.js"></script>
+        <script src="js/angular.architectureTree/app.js"></script>
+        <script src="js/angular.architectureTree/controllers/chart.js"></script>
+        <script src="js/angular.architectureTree/controllers/filter.js"></script>
+        <script src="js/angular.architectureTree/controllers/json-data.js"></script>
+        <script src="js/angular.architectureTree/controllers/panel.js"></script>
+        <script src="js/angular.architectureTree/controllers/undo.js"></script>
+        <script src="js/angular.architectureTree/directives/tree-chart.js"></script>
+        <script src="js/angular.architectureTree/directives/init-focus.js"></script>
+        <script src="js/angular.architectureTree/services/data.js"></script>
+        <script src="js/angular.architectureTree/services/bus.js"></script>
     </body>
 </html>

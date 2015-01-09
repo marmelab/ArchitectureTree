@@ -9,7 +9,7 @@ angular.module('ChartsApp').directive('treeChart', function(bus) {
             data: '='
         },
         link: function(scope, element) {
-            var chart = d3.chart.architectureVizTree();
+            var chart = d3.chart.architectureTree();
 
             scope.$watch("data", function(data) {
                 if (typeof (data) === 'undefined') {

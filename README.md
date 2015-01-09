@@ -1,10 +1,10 @@
-# Marmelab ArchitectureViz
+# Marmelab ArchitectureTree
 
-ArchitectureViz is a single page application to expose your system architecture into a nice vizialisation graph.
+ArchitectureTree is a single page application to expose your system architecture into a nice vizialisation graph.
 
 We generally use a client software to draw our system architecture schema, like Microsoft Visio &copy; for example. But often, only one member of the team has this software installed on his machine and the schema use a specific file format and there is no standard way to draw the schema. It become very hard to maintain during the software evolutions.
 
-ArchitectureViz give you the possibility to maintain a JSON description file, using standard structure and informations.
+ArchitectureTree give you the possibility to maintain a JSON description file, using standard structure and informations.
 It's simple to edit, using the user interface or by direct updating the json description file.
 
 Made with D3.js and AngularJS.
@@ -14,8 +14,8 @@ Made with D3.js and AngularJS.
 ### Get the code
 
 ```bash
-git clone git@github.com:marmelab/ArchitectureViz.git
-cd ArchitectureViz
+git clone git@github.com:marmelab/ArchitectureTree.git
+cd ArchitectureTree
 ```
 
 ### Create data file
@@ -99,4 +99,4 @@ Here is a complete node definition example:
 
 ## License
 
-ArchitectureViz is licensed under the [MIT Licence](LICENSE), courtesy of [marmelab](http://marmelab.com).
+ArchitectureTree is licensed under the [MIT Licence](LICENSE), courtesy of [marmelab](http://marmelab.com).
