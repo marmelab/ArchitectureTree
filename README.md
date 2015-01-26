@@ -105,3 +105,11 @@ Each element of your system is defined by a JSON node entry. Here is an example:
 ArchitectureTree is licensed under the [MIT Licence](LICENSE), courtesy of [marmelab](http://marmelab.com) and [Arte GEIE](https://github.com/ArteGEIE).
 
 If you like ArchitectureTree and use it for an open-source project, please send us a screenshot of your ArchitectureTree at [@marmelab](https://twitter.com/marmelab)!
+
+And don't forget to check out our other visualizations:
+
+* [EventDrops](https://github.com/marmelab/EventDrops)
+* [ArcheoloGit](https://github.com/marmelab/ArcheoloGit)
+* [phpunit-d3-report](https://github.com/marmelab/phpunit-d3-report)
+* [CodeFlower](https://github.com/fzaninotto/CodeFlower)
+* [DependencyWheel](https://github.com/fzaninotto/DependencyWheel)
