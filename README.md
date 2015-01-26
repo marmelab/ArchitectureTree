@@ -1,10 +1,16 @@
 # Marmelab ArchitectureTree
 
-ArchitectureTree is a single page application to expose your system architecture into a nice visualization graph.
+ArchitectureTree is a single page application to visualize and edit architecture schemas in the browser, built with [d3.js](http://d3js.org/) and [AngularJS](https://angularjs.org/).
+
+![Sample Visualization](http://marmelab.com/ArchitectureTree/images/sample.png)
+
+Check out the [online demo](http://marmelab.com/ArchitectureTree/).
+
+## Motivation
 
 We generally use a client software to draw our system architecture schema, like Microsoft Visio &copy; for example. But often, only one member of the team has this software installed on their laptop. Besides, the schema often uses a specific file format, and there is no standard way to draw the schema. It quickly becomes very hard to maintain the schema as the software evolves.
 
-ArchitectureTree give you the possibility to visualize and edit an architecture schema in your browser, and to save it as a JSON file. It's built with d3.js and AngularJS.
+ArchitectureTree give you the possibility to visualize and edit an architecture schema in your browser, and to save it as a JSON file.
 
 ## Installation
 
@@ -97,3 +103,5 @@ Each element of your system is defined by a JSON node entry. Here is an example:
 ## License
 
 ArchitectureTree is licensed under the [MIT Licence](LICENSE), courtesy of [marmelab](http://marmelab.com) and [Arte GEIE](https://github.com/ArteGEIE).
+
+If you like ArchitectureTree and use it for an open-source project, please send us a screenshot of your ArchitectureTree at [@marmelab](https://twitter.com/marmelab)!
