@@ -1,11 +1,11 @@
 {
-  "name": "Root",
+  "name": "dbMotion",
   "children": [
     {
       "name": "Front",
       "children": [
         {
-          "name": "Website",
+          "name": "Application",
           "children": [
             {
               "name": "Home",
@@ -15,12 +15,12 @@
               "host": { "Amazon": ["fo-1", "fo-2"] }
             },
             {
-              "name": "News",
+              "name": "Project Pack",
               "children": [
-                { "name": "World" },
-                { "name": "Sport" },
-                { "name": "Politics" },
-                { "name": "Science" },
+                { "name": "Northwinds Nodes Configuration" },
+                { "name": "Northwoods Configuration Only" },
+                { "name": "Northwoods Dev Nodes Only" },
+                { "name": "Northwoods MPI Only" },
                 { "name": "Business" },
                 { "name": "Technology" },
                 { "name": "Health" }
