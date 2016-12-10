@@ -16,6 +16,7 @@ angular.module('ChartsApp').service('data', function ($http, $q, bus) {
 
         return $http.get("data.json").success(function(data) {
             setJsonData(data);
+
             return data;
         });
     };
