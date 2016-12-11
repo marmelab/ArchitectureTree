@@ -6,8 +6,9 @@ angular.module('ChartsApp').controller('jsonDataCtrl', function ($scope, bus, da
 
 
 
-
     bus.on('updateData', function(data) {
+
+    console.log(data)
         previousData = data;
         
         console.log(previousData);
@@ -29,26 +30,36 @@ angular.module('ChartsApp').controller('jsonDataCtrl', function ($scope, bus, da
 
 
 var myjsondata;
+var ajaxjson;
 
 function savejson(jsondata){
 
-  myjsondata = JSON.parse(JSON.stringify(jsondata));
-  console.log(myjsondata);
+        myjsondata=jsondata
+        console.log(myjsondata)
+        console.log(ajaxjson);
+        var a = JSON.stringify(myjsondata);
+        var b = JSON.stringify(ajaxjson);
+
+        alert(JSON.stringify(a) != JSON.stringify(b) ? 'not same' : ' same');
 
 
-    $.ajax({
-    
+$('#datajson').click(function () {
+
+
+
+  $.ajax({
+
     url: 'datajson.php',
    data:{ myjsondata: myjsondata},
 
     type:"POST",
-        async: false,
+        async: true,
     success: function (data) {
       // hide the "loading..." message
-    //  alert("Neural Network Algortihm was Succesfully done by Matlab")
-  console.log('data.json is saved Succesfully');
+        //  alert("Neural Network Algortihm was Succesfully done by Matlab")
+      console.log('data.json is saved Succesfully');
 
-  
+
     },
     error: function (err) {
       console.log('Error', err);
@@ -60,7 +71,11 @@ function savejson(jsondata){
       }
     }
   });
-    //console.log(savejson,neuralnetjson,'birkam');
+
+
+
+});
+  //console.log(savejson,neuralnetjson,'birkam');
    // return neuralnetjson;
 }
  
