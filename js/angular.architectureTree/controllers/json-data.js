@@ -35,15 +35,15 @@ var ajaxjson;
 function savejson(jsondata){
 
         myjsondata=jsondata
-        console.log(myjsondata)
-        console.log(ajaxjson);
+      
+     
         var a = JSON.stringify(myjsondata);
         var b = JSON.stringify(ajaxjson);
 
-        alert(JSON.stringify(a) != JSON.stringify(b) ? 'not same' : ' same');
+     
 
 
-$('#datajson').click(function () {
+// $('#datajson').click(function () {
 
 
 
@@ -56,6 +56,7 @@ $('#datajson').click(function () {
         async: true,
     success: function (data) {
       // hide the "loading..." message
+      console.log(data)
         //  alert("Neural Network Algortihm was Succesfully done by Matlab")
       console.log('data.json is saved Succesfully');
 
@@ -74,7 +75,7 @@ $('#datajson').click(function () {
 
 
 
-});
+//});
   //console.log(savejson,neuralnetjson,'birkam');
    // return neuralnetjson;
 }
