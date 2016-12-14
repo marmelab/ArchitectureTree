@@ -35,7 +35,7 @@ var ajaxjson;
 function savejson(jsondata){
 
         myjsondata=jsondata
-      
+      console.log(myjsondata);
      
         var a = JSON.stringify(myjsondata);
         var b = JSON.stringify(ajaxjson);

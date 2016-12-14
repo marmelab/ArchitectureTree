@@ -10,7 +10,7 @@ $jsonObj=$_POST["myjsondata"];
 
 //echo $filemtime_old;
 
- if ( $time_now - $filemtime_old > 5)
+ if ( $time_now - $filemtime_old > 1)
   {
 $fp = fopen('data.json', 'w');
 fwrite($fp, json_encode($jsonObj));
