@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"j",
+				"jsonObj"
+			],
+			[
+				"tim",
+				"time_now"
+			],
+			[
+				"js",
+				"json"
+			],
+			[
+				"s",
+				"str"
+			],
+			[
+				"da",
+				"data"
+			],
+			[
 				"S",
 				"stringify"
 			],
@@ -12,16 +32,8 @@
 				"obj1"
 			],
 			[
-				"s",
-				"sql"
-			],
-			[
 				"co",
 				"content"
-			],
-			[
-				"js",
-				"jsondata"
 			],
 			[
 				"neu",
@@ -348,10 +360,6 @@
 				"rpmmin"
 			],
 			[
-				"tim",
-				"timedur"
-			],
-			[
 				"timd",
 				"timedur"
 			],
@@ -406,10 +414,6 @@
 			[
 				"date",
 				"datetime2"
-			],
-			[
-				"da",
-				"datelog"
 			],
 			[
 				"i",
@@ -510,15 +514,51 @@
 			[
 				"ob",
 				"object"
-			],
-			[
-				"lon",
-				"lon"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "js/angular.architectureTree/controllers/json-data.js",
+			"settings":
+			{
+				"buffer_size": 1518,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "datajson.php",
+			"settings":
+			{
+				"buffer_size": 564,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/bikramkawan/Downloads/for_bikeshk.json",
+			"settings":
+			{
+				"buffer_size": 35800,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data.json",
+			"settings":
+			{
+				"buffer_size": 5727,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data1.json",
+			"settings":
+			{
+				"buffer_size": 5699,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -548,6 +588,7 @@
 	},
 	"file_history":
 	[
+		"/Users/bikramkawan/Documents/lineup/README.md",
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/ArchitectureTree/neuraljsonObj.json",
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/ArchitectureTree/data.json-dist",
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/ArchitectureTree/data.json",
@@ -674,8 +715,7 @@
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/Three/examples/webgl_shaders_ocean.html",
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/Temp/ocean-master/demo/index.html",
 		"/Users/bikramkawan/Dropbox/Hials/Mamp/Thesis/tmp/skyboxtest.html",
-		"/Users/bikramkawan/Dropbox/Hials/Mamp/Thesis/form.php",
-		"/Users/bikramkawan/Dropbox/Hials/Mamp/Thesis/selectbox.php"
+		"/Users/bikramkawan/Dropbox/Hials/Mamp/Thesis/form.php"
 	],
 	"find":
 	{
@@ -693,6 +733,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"sss",
 			"children_children_url",
 			"Pval3_y",
 			"Rval2_y",
@@ -819,8 +860,7 @@
 			"nnr",
 			"data",
 			"grpahplot",
-			"post",
-			"target"
+			"post"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -892,8 +932,143 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "js/angular.architectureTree/controllers/json-data.js",
+					"settings":
+					{
+						"buffer_size": 1518,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								571,
+								571
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 335.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "datajson.php",
+					"settings":
+					{
+						"buffer_size": 564,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								208,
+								208
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/bikramkawan/Downloads/for_bikeshk.json",
+					"settings":
+					{
+						"buffer_size": 35800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35800,
+								35800
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "data.json",
+					"settings":
+					{
+						"buffer_size": 5727,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5727,
+								5727
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 33475.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "data1.json",
+					"settings":
+					{
+						"buffer_size": 5699,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13,
+								13
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
