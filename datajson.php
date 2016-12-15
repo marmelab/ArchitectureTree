@@ -1,11 +1,13 @@
 
 <?php
 
-$jsonObj=$_POST["myjsondata"];
+	$data = file_get_contents("php://input");
 
-$fp = fopen('data.json', 'w');
-fwrite($fp, json_encode($jsonObj));
-fclose($fp);
+   $fp = fopen('data.json', 'w');
+	fwrite($fp, ($data));
+	fclose($fp);
+
+
 
 
   ?>
