@@ -3,5 +3,6 @@ angular.module('ChartsApp').controller('chartCtrl', function ($scope, bus) {
 
     bus.on('updateData', function(data) {
         $scope.data = angular.copy(data);
+
     });
 });
